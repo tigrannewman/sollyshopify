@@ -53,9 +53,11 @@
                     <form action="/cart/add" method="post">
                       <input type="hidden" name="id" value="{{ product.variants.first.id }}">
                       <input type="hidden" name="quantity" value="1">
-                      <button type="submit" class="perk-card-btn">Add to Cart</button>
+                      <button type="submit" class="perk-card-atc">
+                        <span class="perk-card-atc-icon">+</span>
+                        <span class="perk-card-atc-label">Add to Cart</span>
+                      </button>
                     </form>
-                    <a href="{{ product.url }}" class="perk-card-view">View Product</a>
                   </div>
                 </div>
               </div>
@@ -111,8 +113,10 @@
                     {%- endif -%}
                   </div>
                   <div class="perk-card-buttons">
-                    <button class="perk-card-btn perk-atc-btn" data-handle="{{ handle }}">Add to Cart</button>
-                    <a href="/products/{{ handle }}" class="perk-card-view">View Product</a>
+                    <button class="perk-card-atc perk-atc-btn" data-handle="{{ handle }}">
+                      <span class="perk-card-atc-icon">+</span>
+                      <span class="perk-card-atc-label">Add to Cart</span>
+                    </button>
                   </div>
                 </div>
               </div>
