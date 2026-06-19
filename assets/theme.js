@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const buyNowBtn = document.querySelector('.btn-buy-now');
   if (buyNowBtn) {
     buyNowBtn.addEventListener('click', function (e) {
-      e.preventDefault();
       const form = document.getElementById('product-form');
       if (!form) return;
+      e.preventDefault();
       fetch('/cart/add.js', { method: 'POST', body: new FormData(form) })
         .then(function () { window.location.href = '/checkout'; });
     });
