@@ -7,7 +7,7 @@
       </div>
 
       <div class="products-grid">
-        {%- assign addon_col = collections['addons'].products -%}
+        {%- assign addon_col = collections['add-on'].products -%}
         {%- for product in addon_col -%}
           {%- assign price   = product.variants.first.price -%}
           {%- assign compare = product.variants.first.compare_at_price -%}
