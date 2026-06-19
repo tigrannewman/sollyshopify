@@ -19,6 +19,7 @@
           {% for product in perks %}
             {% assign tag_label = product.tags | first %}
             {% assign price = product.variants.first.price %}
+            {% assign compare = product.variants.first.compare_at_price %}
             <div class="perk-card">
               <a href="{{ product.url }}" class="perk-card-img-area" style="text-decoration:none;">
                 {% if tag_label != blank %}
@@ -30,7 +31,12 @@
                        alt="{{ product.featured_image.alt | escape }}"
                        loading="lazy">
                 {% endif %}
-                <span class="perk-card-price-badge">{{ price | money_without_trailing_zeros }}</span>
+                <div class="perk-card-price-wrap">
+                  {% if compare > price %}
+                    <span class="perk-card-compare">{{ compare | money_without_trailing_zeros }}</span>
+                  {% endif %}
+                  <span class="perk-card-price">{{ price | money_without_trailing_zeros }}</span>
+                </div>
               </a>
               <div class="perk-card-body">
                 <a href="{{ product.url }}" style="text-decoration:none;">
@@ -69,7 +75,8 @@
           {%- comment -%} Fallback: loads each product from Shopify by handle using all_products {%- endcomment -%}
           {%- assign handles = "solly-super-early-bird-79|solly-basic-bundle-89|solly-limited-carbon-edition-109|solly-pro-bundle-119|2x-solly-super-early-bird-139|3x-solly-super-early-bird-189|2x-solly-limited-carbon-edition-209" | split: "|" -%}
           {%- assign tags    = "1x|Basic Bundle|Carbon Edition|Pro Bundle|2x|3x|2x Carbon" | split: "|" -%}
-          {%- assign prices  = "$79|$89|$109|$119|$139|$189|$209" | split: "|" -%}
+          {%- assign prices   = "$79|$89|$109|$119|$139|$189|$209" | split: "|" -%}
+          {%- assign compares = "$115|$165|$209||$259|$345|" | split: "|" -%}
           {%- assign badge1s = "6 left of 865|4 left of 1068|3 left of 742|13 left of 100|3 left of 410|22 left of 275|3 left of 188" | split: "|" -%}
           {%- assign badge2s = "Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026" | split: "|" -%}
           {%- assign badge3s = "Ships Worldwide|Ships Worldwide||||| " | split: "|" -%}
@@ -79,7 +86,8 @@
             {%- assign idx     = forloop.index0 -%}
             {%- assign sp      = all_products[handle] -%}
             {%- assign c_tag   = tags[idx] -%}
-            {%- assign c_price = prices[idx] -%}
+            {%- assign c_price   = prices[idx] -%}
+            {%- assign c_compare = compares[idx] -%}
             {%- assign c_b1    = badge1s[idx] -%}
             {%- assign c_b2    = badge2s[idx] -%}
             {%- assign c_b3    = badge3s[idx] -%}
@@ -95,7 +103,12 @@
                        alt="{{ sp.featured_image.alt | default: c_name | escape }}"
                        loading="lazy">
                 {%- endif -%}
-                <span class="perk-card-price-badge">{{ c_price }}</span>
+                <div class="perk-card-price-wrap">
+                  {%- if c_compare != blank -%}
+                    <span class="perk-card-compare">{{ c_compare }}</span>
+                  {%- endif -%}
+                  <span class="perk-card-price">{{ c_price }}</span>
+                </div>
               </a>
               <div class="perk-card-body">
                 <h3 class="perk-card-name">{{ c_name }}</h3>

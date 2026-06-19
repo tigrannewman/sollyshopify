@@ -107,17 +107,29 @@
   line-height: 1.25;
 }
 
-.perk-card-price-badge {
+.perk-card-price-wrap {
   position: absolute;
   bottom: 14px;
   left: 16px;
   z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.perk-card-price {
   font-size: 36px;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.02em;
   line-height: 1;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+.perk-card-compare {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.45);
+  text-decoration: line-through;
+  line-height: 1;
 }
 
 .perk-card-desc {
