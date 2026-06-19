@@ -1,0 +1,111 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "products-grid": {
+      "type": "products-grid",
+      "settings": {}
+    },
+    "feature": {
+      "type": "feature",
+      "settings": {}
+    },
+    "charge": {
+      "type": "charge",
+      "settings": {}
+    },
+    "fingertips": {
+      "type": "fingertips",
+      "settings": {}
+    },
+    "cta-1": {
+      "type": "cta",
+      "settings": {}
+    },
+    "protection": {
+      "type": "protection",
+      "settings": {}
+    },
+    "benefits-1": {
+      "type": "benefits-1",
+      "settings": {}
+    },
+    "cta-2": {
+      "type": "cta",
+      "settings": {}
+    },
+    "powerbank-video": {
+      "type": "powerbank-video",
+      "settings": {}
+    },
+    "cases": {
+      "type": "cases",
+      "settings": {}
+    },
+    "cta-3": {
+      "type": "cta",
+      "settings": {}
+    },
+    "benefits-2": {
+      "type": "benefits-2",
+      "settings": {}
+    },
+    "specifications": {
+      "type": "specifications",
+      "settings": {}
+    },
+    "cta-img": {
+      "type": "cta-img",
+      "settings": {}
+    },
+    "product-colors": {
+      "type": "product-colors",
+      "settings": {}
+    },
+    "cta-4": {
+      "type": "cta",
+      "settings": {}
+    },
+    "engagement": {
+      "type": "engagement",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "hero",
+    "products-grid",
+    "feature",
+    "charge",
+    "fingertips",
+    "cta-1",
+    "protection",
+    "benefits-1",
+    "cta-2",
+    "powerbank-video",
+    "cases",
+    "cta-3",
+    "benefits-2",
+    "specifications",
+    "cta-img",
+    "product-colors",
+    "cta-4",
+    "engagement",
+    "faq",
+    "footer"
+  ]
+}
