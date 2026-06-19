@@ -125,11 +125,13 @@
   text-shadow: 0 2px 12px rgba(0,0,0,0.6);
 }
 .perk-card-compare {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 500;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.4);
   text-decoration: line-through;
   line-height: 1;
+  align-self: flex-end;
+  padding-bottom: 3px;
 }
 
 .perk-card-desc {
@@ -142,6 +144,12 @@
 .perk-card-desc p  { margin: 0 0 8px; }
 .perk-card-desc ul { margin: 6px 0 0; padding-left: 18px; }
 .perk-card-desc li { margin-bottom: 4px; }
+.perk-card-desc--clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .perk-card-footer {
   margin-top: 4px;

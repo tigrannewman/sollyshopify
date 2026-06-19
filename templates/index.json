@@ -10,7 +10,17 @@
     },
     "products-grid": {
       "type": "products-grid",
-      "settings": {}
+      "settings": {
+        "section_title": "Choose the product",
+        "collection_handle": "perks"
+      }
+    },
+    "addons-grid": {
+      "type": "products-grid",
+      "settings": {
+        "section_title": "Choose the add on",
+        "collection_handle": "addons"
+      }
     },
     "feature": {
       "type": "feature",
@@ -89,6 +99,7 @@
     "header",
     "hero",
     "products-grid",
+    "addons-grid",
     "feature",
     "charge",
     "fingertips",

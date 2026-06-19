@@ -1,19 +1,17 @@
-{% comment %}
-  Reads from the "perks" collection if it exists.
-  Falls back to all_products[handle] to pull live images from Shopify.
-{% endcomment %}
+{%- assign grid_collection = section.settings.collection_handle | default: 'perks' -%}
+{%- assign grid_title = section.settings.section_title | default: 'Choose the product' -%}
 
-<section class="section-products" id="perks">
+<section class="section-products" id="{{ grid_collection }}">
   <div class="padding-global">
     <div class="container">
 
       <div class="products-header">
-        <h2 class="h-56">Select the Perk</h2>
+        <h2 class="h-56">{{ grid_title }}</h2>
       </div>
 
       <div class="products-grid">
 
-        {% assign perks = collections['perks'].products %}
+        {% assign perks = collections[grid_collection].products %}
         {% if perks.size > 0 %}
 
           {% for product in perks %}
@@ -32,17 +30,17 @@
                        loading="lazy">
                 {% endif %}
                 <div class="perk-card-price-wrap">
+                  <span class="perk-card-price">{{ price | money_without_trailing_zeros }}</span>
                   {% if compare > price %}
                     <span class="perk-card-compare">{{ compare | money_without_trailing_zeros }}</span>
                   {% endif %}
-                  <span class="perk-card-price">{{ price | money_without_trailing_zeros }}</span>
                 </div>
               </a>
               <div class="perk-card-body">
                 <a href="{{ product.url }}" style="text-decoration:none;">
                   <h3 class="perk-card-name">{{ product.title }}</h3>
                 </a>
-                <div class="perk-card-desc">{{ product.description }}</div>
+                <div class="perk-card-desc perk-card-desc--clamp">{{ product.description }}</div>
                 <div class="perk-card-footer">
                   <div class="perk-card-meta">
                     {% for tag in product.tags offset: 1 %}
@@ -104,15 +102,15 @@
                        loading="lazy">
                 {%- endif -%}
                 <div class="perk-card-price-wrap">
+                  <span class="perk-card-price">{{ c_price }}</span>
                   {%- if c_compare != blank -%}
                     <span class="perk-card-compare">{{ c_compare }}</span>
                   {%- endif -%}
-                  <span class="perk-card-price">{{ c_price }}</span>
                 </div>
               </a>
               <div class="perk-card-body">
                 <h3 class="perk-card-name">{{ c_name }}</h3>
-                <div class="perk-card-desc"><p>{{ c_desc }}</p></div>
+                <div class="perk-card-desc perk-card-desc--clamp"><p>{{ c_desc }}</p></div>
                 <div class="perk-card-footer">
                   <div class="perk-card-meta">
                     {%- if c_b1 != blank -%}
@@ -146,6 +144,19 @@
 {% schema %}
 {
   "name": "Products Grid",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Choose the product"
+    },
+    {
+      "type": "text",
+      "id": "collection_handle",
+      "label": "Collection handle",
+      "default": "perks"
+    }
+  ]
 }
 {% endschema %}
