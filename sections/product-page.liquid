@@ -143,6 +143,64 @@
   </div>
 </section>
 
+{%- assign in_perks = false -%}
+{%- for col in product.collections -%}
+  {%- if col.handle == 'perks' -%}{%- assign in_perks = true -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if in_perks -%}
+  {%- assign addon_products = collections['addons'].products -%}
+  {%- if addon_products.size > 0 -%}
+<section class="section-products" style="padding-top:0;">
+  <div class="padding-global">
+    <div class="container">
+      <div class="products-header">
+        <h2 class="h-56">Power Up Your Setup</h2>
+      </div>
+      <div class="products-grid">
+        {%- for ap in addon_products -%}
+          {%- assign ap_price   = ap.variants.first.price -%}
+          {%- assign ap_compare = ap.variants.first.compare_at_price -%}
+          <div class="perk-card">
+            <a href="{{ ap.url }}" class="perk-card-img-area" style="text-decoration:none;">
+              {%- if ap.featured_image -%}
+                <img class="perk-card-img"
+                     src="{{ ap.featured_image | image_url: width: 800 }}"
+                     alt="{{ ap.featured_image.alt | escape }}"
+                     loading="lazy">
+              {%- endif -%}
+              <div class="perk-card-price-wrap">
+                <span class="perk-card-price">{{ ap_price | money_without_trailing_zeros }}</span>
+                {%- if ap_compare > ap_price -%}
+                  <span class="perk-card-compare">{{ ap_compare | money_without_trailing_zeros }}</span>
+                {%- endif -%}
+              </div>
+            </a>
+            <div class="perk-card-body">
+              <h3 class="perk-card-name">{{ ap.title }}</h3>
+              <div class="perk-card-desc perk-card-desc--clamp">{{ ap.description }}</div>
+              <div class="perk-card-footer">
+                <div class="perk-card-buttons">
+                  <form action="/cart/add" method="post">
+                    <input type="hidden" name="id" value="{{ ap.variants.first.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="perk-card-atc">
+                      <span class="perk-card-atc-icon">+</span>
+                      <span class="perk-card-atc-label">Add to Cart</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+  {%- endif -%}
+{%- endif -%}
+
 <script>
 function adjustQty(delta) {
   const input = document.getElementById('qty-input');

@@ -11,14 +11,14 @@
     "products-grid": {
       "type": "products-grid",
       "settings": {
-        "section_title": "Choose the product",
+        "section_title": "Choose the Product",
         "collection_handle": "perks"
       }
     },
     "addons-grid": {
       "type": "products-grid",
       "settings": {
-        "section_title": "Choose the add on",
+        "section_title": "Power Up Your Setup",
         "collection_handle": "addons"
       }
     },
