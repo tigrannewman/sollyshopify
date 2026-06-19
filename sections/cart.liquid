@@ -45,23 +45,21 @@
             </div>
 
             <div class="cart-footer">
-              <div class="cart-totals">
-                <div class="cart-total-row">
-                  <span>Subtotal</span>
-                  <span>{{ cart.total_price | money }}</span>
-                </div>
-                <div class="cart-total-note">Taxes and shipping calculated at checkout</div>
+              <div class="cart-total-row">
+                <span>Subtotal</span>
+                <span>{{ cart.total_price | money }}</span>
               </div>
+              <div class="cart-total-note">Taxes and shipping calculated at checkout</div>
               <div class="cart-actions">
-                <button type="submit" name="update" class="btn-buy-now" style="width:100%;">Update Cart</button>
-                <a href="/checkout" class="btn-add-to-cart" style="width:100%;text-decoration:none;justify-content:center;">
+                <button type="submit" name="update" class="btn-buy-now">Update Cart</button>
+                <a href="/checkout" class="btn-add-to-cart" style="text-decoration:none;justify-content:center;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                   Proceed to Checkout
                 </a>
-                <div class="product-secure-badge">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  Checkout secured through Stripe
-                </div>
+              </div>
+              <div class="product-secure-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Checkout secured through Stripe
               </div>
             </div>
 
@@ -118,26 +116,23 @@
 .cart-item-remove:hover { color: #ff5555; }
 
 .cart-footer {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 40px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-top: 40px;
   padding-top: 32px;
   border-top: 1px solid rgba(255,255,255,0.08);
-}
-@media (max-width: 640px) {
-  .cart-footer { grid-template-columns: 1fr; gap: 24px; }
 }
 
 .cart-total-row {
   display: flex; justify-content: space-between;
   font-size: 20px; font-weight: 700; color: #fff;
-  margin-bottom: 8px;
 }
-.cart-total-note { font-size: 13px; color: rgba(255,255,255,0.35); }
+.cart-total-note { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: -4px; }
 
-.cart-actions { display: flex; flex-direction: column; gap: 10px; }
+.cart-actions { display: flex; flex-direction: row; gap: 10px; }
+.cart-actions .btn-buy-now,
+.cart-actions .btn-add-to-cart { flex: 1; width: auto; }
 </style>
 
 <script>
