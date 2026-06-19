@@ -19,19 +19,16 @@
             {% assign compare = product.variants.first.compare_at_price %}
             {% assign price   = product.variants.first.price %}
             <div class="perk-card">
-              <a href="{{ product.url }}" style="display:contents; text-decoration:none;">
-                <div class="perk-card-img-area">
-                  {% if tag_label != blank %}
-                    <span class="perk-card-tag">{{ tag_label }}</span>
-                  {% endif %}
-                  {% if product.featured_image %}
-                    <img class="perk-card-img"
-                         src="{{ product.featured_image | image_url: width: 800 }}"
-                         alt="{{ product.featured_image.alt | escape }}"
-                         loading="lazy">
-                  {% endif %}
-              </div>
-                </div>
+              <a href="{{ product.url }}" class="perk-card-img-area" style="text-decoration:none;">
+                {% if tag_label != blank %}
+                  <span class="perk-card-tag">{{ tag_label }}</span>
+                {% endif %}
+                {% if product.featured_image %}
+                  <img class="perk-card-img"
+                       src="{{ product.featured_image | image_url: width: 800 }}"
+                       alt="{{ product.featured_image.alt | escape }}"
+                       loading="lazy">
+                {% endif %}
               </a>
 
               <div class="perk-card-body">

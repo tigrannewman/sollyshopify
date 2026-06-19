@@ -35,7 +35,8 @@
 .perk-card-img-area {
   position: relative;
   background: #111;
-  height: 220px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
