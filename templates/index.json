@@ -8,14 +8,14 @@
       "type": "hero",
       "settings": {}
     },
-    "products-grid": {
+    "perks-grid": {
       "type": "products-grid",
       "settings": {
         "section_title": "Choose the Product",
         "collection_handle": "perks"
       }
     },
-    "addons-grid": {
+    "addons-grid-v2": {
       "type": "products-grid",
       "settings": {
         "section_title": "Power Up Your Setup",
@@ -98,8 +98,8 @@
   "order": [
     "header",
     "hero",
-    "products-grid",
-    "addons-grid",
+    "perks-grid",
+    "addons-grid-v2",
     "feature",
     "charge",
     "fingertips",
