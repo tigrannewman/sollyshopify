@@ -16,6 +16,9 @@
   {{ 'product-cards.css' | asset_url | stylesheet_tag }}
 
   <style>
+    body {
+      padding-top: var(--nav-height);
+    }
     * {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
