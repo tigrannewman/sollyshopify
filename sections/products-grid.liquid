@@ -1,6 +1,6 @@
 {% comment %}
-  Reads from the "perks" collection. Create a collection with handle "perks" in Shopify admin
-  and add all 7 products to it. The first product tag is used as the card label pill.
+  Reads from the "perks" collection if it exists.
+  Falls back to all_products[handle] to pull live images from Shopify.
 {% endcomment %}
 
 <section class="section-products" id="perks">
@@ -12,12 +12,13 @@
       </div>
 
       <div class="products-grid">
+
         {% assign perks = collections['perks'].products %}
         {% if perks.size > 0 %}
+
           {% for product in perks %}
             {% assign tag_label = product.tags | first %}
-            {% assign compare = product.variants.first.compare_at_price %}
-            {% assign price   = product.variants.first.price %}
+            {% assign price = product.variants.first.price %}
             <div class="perk-card">
               <a href="{{ product.url }}" class="perk-card-img-area" style="text-decoration:none;">
                 {% if tag_label != blank %}
@@ -30,18 +31,16 @@
                        loading="lazy">
                 {% endif %}
               </a>
-
               <div class="perk-card-body">
                 <a href="{{ product.url }}" style="text-decoration:none;">
                   <h3 class="perk-card-name">{{ product.title }}</h3>
                 </a>
                 <span class="perk-card-price-badge">{{ price | money_without_trailing_zeros }}</span>
                 <div class="perk-card-desc">{{ product.description }}</div>
-
                 <div class="perk-card-footer">
                   <div class="perk-card-meta">
                     {% for tag in product.tags offset: 1 %}
-                      {% if tag contains 'left' or tag contains 'Ships' or tag contains 'delivery' or tag contains 'Aug' %}
+                      {% if tag contains 'left' or tag contains 'Ships' or tag contains 'Aug' %}
                         {% if tag contains 'left' %}
                           <span class="perk-meta-badge urgent">{{ tag }}</span>
                         {% else %}
@@ -50,7 +49,6 @@
                       {% endif %}
                     {% endfor %}
                   </div>
-
                   <div class="perk-card-buttons">
                     <form action="/cart/add" method="post">
                       <input type="hidden" name="id" value="{{ product.variants.first.id }}">
@@ -65,237 +63,65 @@
           {% endfor %}
 
         {% else %}
-          {%- comment -%} Fallback: hardcoded cards from CSV when no collection exists yet {%- endcomment -%}
-          {% assign static_perks = "
-            Solly: Super Early Bird | $79|$79|$115|1x|Experience next generation portable power with Solly, your all in one solution for work, travel, and everyday life.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab81_31036088991070a59f0c016768b09cb4_original.avif|6 left of 865|Aug 2026
-            Solly Basic Bundle|$89|$165|Basic Bundle|The complete power setup for those who expect more from every device.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab82_image%2025.jpg|4 left of 1068|Aug 2026
-            Solly Limited Carbon Edition|$109|$209|Carbon Edition|The ultimate version of Solly, crafted with a real carbon fiber body for a lighter, stronger, and more premium feel.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab83_image%2026.jpg|3 left of 742|Aug 2026
-            Solly Pro Bundle|$119||Pro Bundle|A complete power ecosystem built for those who rely on energy every day.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab84_image%2027.jpg|13 left of 100|Aug 2026
-            2x Solly: Super Early Bird|$139|$259|2x|More power. More flexibility. Get 2× Solly and always have energy where you need it.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab85_image%2028.jpg|3 left of 410|Aug 2026
-            3x Solly: Super Early Bird|$189|$345|3x|Triple Solly. Power for every moment. Keep one at home, one at work, and one on the move.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab86_image%2029.jpg|22 left of 275|Aug 2026
-            2x Solly Limited Carbon Edition|$209||2x Carbon|The ultimate version of Solly, now in a 2× Carbon Edition bundle with a real carbon fiber body.|https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab87_image%2030.jpg|3 left of 188|Aug 2026
-          " | strip_newlines | split: "
-          " %}
 
-          {%- assign perk_data = "" -%}
+          {%- comment -%} Fallback: loads each product from Shopify by handle using all_products {%- endcomment -%}
+          {%- assign handles = "solly-super-early-bird-79|solly-basic-bundle-89|solly-limited-carbon-edition-109|solly-pro-bundle-119|2x-solly-super-early-bird-139|3x-solly-super-early-bird-189|2x-solly-limited-carbon-edition-209" | split: "|" -%}
+          {%- assign tags    = "1x|Basic Bundle|Carbon Edition|Pro Bundle|2x|3x|2x Carbon" | split: "|" -%}
+          {%- assign prices  = "$79|$89|$109|$119|$139|$189|$209" | split: "|" -%}
+          {%- assign badge1s = "6 left of 865|4 left of 1068|3 left of 742|13 left of 100|3 left of 410|22 left of 275|3 left of 188" | split: "|" -%}
+          {%- assign badge2s = "Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026" | split: "|" -%}
+          {%- assign badge3s = "Ships Worldwide|Ships Worldwide||||| " | split: "|" -%}
+          {%- assign descs   = "Experience next generation portable power with Solly, your all in one solution for work, travel, and everyday life.|The complete power setup for those who expect more from every device.|The ultimate version of Solly, crafted with a real carbon fiber body for a lighter, stronger, and more premium feel.|A complete power ecosystem built for those who rely on energy every day.|More power. More flexibility. Get 2x Solly and always have energy where you need it.|Triple Solly. Power for every moment. Keep one at home, one at work, and one on the move.|The ultimate version of Solly, now in a 2x Carbon Edition bundle." | split: "|" -%}
 
-          {%- comment -%} ── Card 1 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">1x</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab81_31036088991070a59f0c016768b09cb4_original.avif" alt="Solly Super Early Bird" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">Solly: Super Early Bird | $79</h3>
-              <span class="perk-card-price-badge">$79</span>
-              <div class="perk-card-desc">
-                <p>Experience next generation portable power with Solly, your all in one solution for work, travel, and everyday life.</p>
-                <ul>
-                  <li>Built with a 20,000mAh solid-state battery, 2×140W USB-C, and 20W USB-A</li>
-                  <li>Built-in 110V/220V plug — wall charger and travel adapter in one</li>
-                  <li>You save $36 off the retail price!</li>
-                </ul>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">6 left of 865</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                  <span class="perk-meta-badge">Ships Worldwide</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="solly-super-early-bird-79">Add to Cart</button>
-                  <a href="/products/solly-super-early-bird-79" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
+          {%- for handle in handles -%}
+            {%- assign idx     = forloop.index0 -%}
+            {%- assign sp      = all_products[handle] -%}
+            {%- assign c_tag   = tags[idx] -%}
+            {%- assign c_price = prices[idx] -%}
+            {%- assign c_b1    = badge1s[idx] -%}
+            {%- assign c_b2    = badge2s[idx] -%}
+            {%- assign c_b3    = badge3s[idx] -%}
+            {%- assign c_desc  = descs[idx] -%}
+            {%- assign c_name  = sp.title | default: handle -%}
 
-          {%- comment -%} ── Card 2 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">Basic Bundle</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab82_image%2025.jpg" alt="Solly Basic Bundle" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">Solly Basic Bundle</h3>
-              <span class="perk-card-price-badge">$89</span>
-              <div class="perk-card-desc">
-                <p>The complete power setup for those who expect more from every device.</p>
-                <ul>
-                  <li>Solly Power Bank (20,000mAh) – solid-state battery, 2×140W USB-C, 20W USB-A</li>
-                  <li>100W USB-C to USB-C Lanyard Cable – high-speed cable that doubles as a carrying strap</li>
-                  <li>You save $86 off the retail price!</li>
-                </ul>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">4 left of 1,068</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                  <span class="perk-meta-badge">Ships Worldwide</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="solly-basic-bundle-89">Add to Cart</button>
-                  <a href="/products/solly-basic-bundle-89" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {%- comment -%} ── Card 3 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">Carbon Edition</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab83_image%2026.jpg" alt="Solly Limited Carbon Edition" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">Solly Limited Carbon Edition</h3>
-              <span class="perk-card-price-badge">$109</span>
-              <div class="perk-card-desc">
-                <p>The ultimate version of Solly, crafted with a real carbon fiber body for a lighter, stronger, and more premium feel.</p>
-                <ul>
-                  <li>100% real carbon fiber construction</li>
-                  <li>Lighter and more durable body</li>
-                  <li>Enhanced heat dissipation</li>
-                </ul>
-                <p>⚠️ Limited production only. Once sold out, it's gone for good.</p>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">3 left of 742</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="solly-limited-carbon-edition-109">Add to Cart</button>
-                  <a href="/products/solly-limited-carbon-edition-109" class="perk-card-view">View Product</a>
+            <div class="perk-card">
+              <a href="/products/{{ handle }}" class="perk-card-img-area" style="text-decoration:none;">
+                <span class="perk-card-tag">{{ c_tag }}</span>
+                {%- if sp.featured_image -%}
+                  <img class="perk-card-img"
+                       src="{{ sp.featured_image | image_url: width: 800 }}"
+                       alt="{{ sp.featured_image.alt | default: c_name | escape }}"
+                       loading="lazy">
+                {%- endif -%}
+              </a>
+              <div class="perk-card-body">
+                <h3 class="perk-card-name">{{ c_name }}</h3>
+                <span class="perk-card-price-badge">{{ c_price }}</span>
+                <div class="perk-card-desc"><p>{{ c_desc }}</p></div>
+                <div class="perk-card-footer">
+                  <div class="perk-card-meta">
+                    {%- if c_b1 != blank -%}
+                      <span class="perk-meta-badge{% if c_b1 contains 'left' %} urgent{% endif %}">{{ c_b1 }}</span>
+                    {%- endif -%}
+                    {%- if c_b2 != blank -%}
+                      <span class="perk-meta-badge">{{ c_b2 }}</span>
+                    {%- endif -%}
+                    {%- if c_b3 != blank and c_b3 != ' ' -%}
+                      <span class="perk-meta-badge">{{ c_b3 }}</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="perk-card-buttons">
+                    <button class="perk-card-btn perk-atc-btn" data-handle="{{ handle }}">Add to Cart</button>
+                    <a href="/products/{{ handle }}" class="perk-card-view">View Product</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {%- comment -%} ── Card 4 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">Pro Bundle</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab84_image%2027.jpg" alt="Solly Pro Bundle" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">Solly Pro Bundle</h3>
-              <span class="perk-card-price-badge">$119</span>
-              <div class="perk-card-desc">
-                <p>A complete power ecosystem built for those who rely on energy every day.</p>
-                <ul>
-                  <li>Solly (20,000mAh) + 100W USB-C Lanyard Cable</li>
-                  <li>3× Charging Station – recharge up to three Solly units at once</li>
-                  <li>Plug type and color selected after campaign via survey</li>
-                </ul>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">13 left of 100</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="solly-pro-bundle-119">Add to Cart</button>
-                  <a href="/products/solly-pro-bundle-119" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {%- comment -%} ── Card 5 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">2x</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab85_image%2028.jpg" alt="2x Solly Super Early Bird" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">2x Solly: Super Early Bird</h3>
-              <span class="perk-card-price-badge">$139</span>
-              <div class="perk-card-desc">
-                <p>More power. More flexibility. Get 2× Solly and always have energy where you need it.</p>
-                <ul>
-                  <li>2× Solly units — 20,000mAh each, 2×140W USB-C, built-in wall plug</li>
-                  <li>Solar support for outdoor backup charging</li>
-                  <li>You save $120 off the retail price!</li>
-                </ul>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">3 left of 410</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="2x-solly-super-early-bird-139">Add to Cart</button>
-                  <a href="/products/2x-solly-super-early-bird-139" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {%- comment -%} ── Card 6 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">3x</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab86_image%2029.jpg" alt="3x Solly Super Early Bird" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">3x Solly: Super Early Bird</h3>
-              <span class="perk-card-price-badge">$189</span>
-              <div class="perk-card-desc">
-                <p>Triple Solly. Power for every moment.</p>
-                <ul>
-                  <li>Keep one at home, one at work, and one on the move</li>
-                  <li>20,000mAh solid-state battery, 2×140W USB-C per unit</li>
-                  <li>You save $156 off the retail price!</li>
-                </ul>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge">22 left of 275</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="3x-solly-super-early-bird-189">Add to Cart</button>
-                  <a href="/products/3x-solly-super-early-bird-189" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {%- comment -%} ── Card 7 ── {%- endcomment -%}
-          <div class="perk-card">
-            <div class="perk-card-img-area">
-              <span class="perk-card-tag">2x Carbon</span>
-              <img class="perk-card-img" src="https://cdn.prod.website-files.com/6a352644dd5a1baca5d1ab7d/6a352644dd5a1baca5d1ab87_image%2030.jpg" alt="2x Solly Limited Carbon Edition" loading="lazy">
-            </div>
-            <div class="perk-card-body">
-              <h3 class="perk-card-name">2x Solly Limited Carbon Edition</h3>
-              <span class="perk-card-price-badge">$209</span>
-              <div class="perk-card-desc">
-                <p>The ultimate version of Solly, now in a 2× Carbon Edition bundle.</p>
-                <ul>
-                  <li>2× Carbon Edition Solly power banks</li>
-                  <li>100% real carbon fiber — lighter, stronger, premium feel</li>
-                  <li>Enhanced heat dissipation</li>
-                </ul>
-                <p>⚠️ Limited production only. Once sold out, it's gone for good.</p>
-              </div>
-              <div class="perk-card-footer">
-                <div class="perk-card-meta">
-                  <span class="perk-meta-badge urgent">3 left of 188</span>
-                  <span class="perk-meta-badge">Ships Aug 2026</span>
-                </div>
-                <div class="perk-card-buttons">
-                  <button class="perk-card-btn perk-atc-btn" data-handle="2x-solly-limited-carbon-edition-209">Add to Cart</button>
-                  <a href="/products/2x-solly-limited-carbon-edition-209" class="perk-card-view">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
+          {%- endfor -%}
 
         {% endif %}
-      </div>
 
+      </div>
     </div>
   </div>
 </section>
