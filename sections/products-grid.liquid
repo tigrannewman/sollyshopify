@@ -30,12 +30,12 @@
                        alt="{{ product.featured_image.alt | escape }}"
                        loading="lazy">
                 {% endif %}
+                <span class="perk-card-price-badge">{{ price | money_without_trailing_zeros }}</span>
               </a>
               <div class="perk-card-body">
                 <a href="{{ product.url }}" style="text-decoration:none;">
                   <h3 class="perk-card-name">{{ product.title }}</h3>
                 </a>
-                <span class="perk-card-price-badge">{{ price | money_without_trailing_zeros }}</span>
                 <div class="perk-card-desc">{{ product.description }}</div>
                 <div class="perk-card-footer">
                   <div class="perk-card-meta">
@@ -95,10 +95,10 @@
                        alt="{{ sp.featured_image.alt | default: c_name | escape }}"
                        loading="lazy">
                 {%- endif -%}
+                <span class="perk-card-price-badge">{{ c_price }}</span>
               </a>
               <div class="perk-card-body">
                 <h3 class="perk-card-name">{{ c_name }}</h3>
-                <span class="perk-card-price-badge">{{ c_price }}</span>
                 <div class="perk-card-desc"><p>{{ c_desc }}</p></div>
                 <div class="perk-card-footer">
                   <div class="perk-card-meta">
