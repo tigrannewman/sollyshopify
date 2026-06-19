@@ -1,0 +1,60 @@
+<section class="section-products" id="addons">
+  <div class="padding-global">
+    <div class="container">
+
+      <div class="products-header">
+        <h2 class="h-56">Power Up Your Setup</h2>
+      </div>
+
+      <div class="products-grid">
+        {%- assign addon_col = collections['addons'].products -%}
+        {%- for product in addon_col -%}
+          {%- assign price   = product.variants.first.price -%}
+          {%- assign compare = product.variants.first.compare_at_price -%}
+          <div class="perk-card">
+            <a href="{{ product.url }}" class="perk-card-img-area" style="text-decoration:none;">
+              {%- if product.featured_image -%}
+                <img class="perk-card-img"
+                     src="{{ product.featured_image | image_url: width: 800 }}"
+                     alt="{{ product.featured_image.alt | escape }}"
+                     loading="lazy">
+              {%- endif -%}
+              <div class="perk-card-price-wrap">
+                <span class="perk-card-price">{{ price | money_without_trailing_zeros }}</span>
+                {%- if compare > price -%}
+                  <span class="perk-card-compare">{{ compare | money_without_trailing_zeros }}</span>
+                {%- endif -%}
+              </div>
+            </a>
+            <div class="perk-card-body">
+              <a href="{{ product.url }}" style="text-decoration:none;">
+                <h3 class="perk-card-name">{{ product.title }}</h3>
+              </a>
+              <div class="perk-card-desc perk-card-desc--clamp">{{ product.description }}</div>
+              <div class="perk-card-footer">
+                <div class="perk-card-buttons">
+                  <form action="/cart/add" method="post">
+                    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="perk-card-atc">
+                      <span class="perk-card-atc-icon">+</span>
+                      <span class="perk-card-atc-label">Add to Cart</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Addons Grid",
+  "settings": []
+}
+{% endschema %}

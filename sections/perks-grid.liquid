@@ -1,0 +1,156 @@
+{%- assign grid_collection = 'perks' -%}
+{%- assign grid_title = 'Choose the Product' -%}
+
+<section class="section-products" id="{{ grid_collection }}">
+  <div class="padding-global">
+    <div class="container">
+
+      <div class="products-header">
+        <h2 class="h-56">{{ grid_title }}</h2>
+      </div>
+
+      <div class="products-grid">
+
+        {% assign perks = collections[grid_collection].products %}
+        {% if perks.size > 0 %}
+
+          {% for product in perks %}
+            {%- assign tag_label = '' -%}
+            {%- assign skip_tags = 'perks,limited,Ships Aug 2026,Ships Worldwide,Ships Worldwide' | split: ',' -%}
+            {%- for t in product.tags -%}
+              {%- unless skip_tags contains t or t contains 'Ships' -%}
+                {%- if tag_label == '' -%}{%- assign tag_label = t -%}{%- endif -%}
+              {%- endunless -%}
+            {%- endfor -%}
+            {% assign price = product.variants.first.price %}
+            {% assign compare = product.variants.first.compare_at_price %}
+            <div class="perk-card">
+              <a href="{{ product.url }}" class="perk-card-img-area" style="text-decoration:none;">
+                {% if tag_label != blank %}
+                  <span class="perk-card-tag">{{ tag_label }}</span>
+                {% endif %}
+                {% if product.featured_image %}
+                  <img class="perk-card-img"
+                       src="{{ product.featured_image | image_url: width: 800 }}"
+                       alt="{{ product.featured_image.alt | escape }}"
+                       loading="lazy">
+                {% endif %}
+                <div class="perk-card-price-wrap">
+                  <span class="perk-card-price">{{ price | money_without_trailing_zeros }}</span>
+                  {% if compare > price %}
+                    <span class="perk-card-compare">{{ compare | money_without_trailing_zeros }}</span>
+                  {% endif %}
+                </div>
+              </a>
+              <div class="perk-card-body">
+                <a href="{{ product.url }}" style="text-decoration:none;">
+                  <h3 class="perk-card-name">{{ product.title }}</h3>
+                </a>
+                <div class="perk-card-desc perk-card-desc--clamp">{{ product.description }}</div>
+                <div class="perk-card-footer">
+                  <div class="perk-card-meta">
+                    {% for tag in product.tags offset: 1 %}
+                      {% if tag contains 'left' or tag contains 'Ships' or tag contains 'Aug' %}
+                        {% if tag contains 'left' %}
+                          <span class="perk-meta-badge urgent">{{ tag }}</span>
+                        {% else %}
+                          <span class="perk-meta-badge">{{ tag }}</span>
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="perk-card-buttons">
+                    <form action="/cart/add" method="post">
+                      <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                      <input type="hidden" name="quantity" value="1">
+                      <button type="submit" class="perk-card-atc">
+                        <span class="perk-card-atc-icon">+</span>
+                        <span class="perk-card-atc-label">Add to Cart</span>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+        {% else %}
+
+          {%- comment -%} Fallback: loads each product from Shopify by handle using all_products {%- endcomment -%}
+          {%- assign handles = "solly-super-early-bird-79|solly-basic-bundle-89|solly-limited-carbon-edition-109|solly-pro-bundle-119|2x-solly-super-early-bird-139|3x-solly-super-early-bird-189|2x-solly-limited-carbon-edition-209" | split: "|" -%}
+          {%- assign tags    = "1x|Basic Bundle|Carbon Edition|Pro Bundle|2x|3x|2x Carbon" | split: "|" -%}
+          {%- assign prices   = "$79|$89|$109|$119|$139|$189|$209" | split: "|" -%}
+          {%- assign compares = "$115|$165|$209||$259|$345|" | split: "|" -%}
+          {%- comment -%} Handles, prices and compares confirmed from Shopify product export {%- endcomment -%}
+          {%- assign badge1s = "6 left of 865|4 left of 1068|3 left of 742|13 left of 100|3 left of 410|22 left of 275|3 left of 188" | split: "|" -%}
+          {%- assign badge2s = "Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026" | split: "|" -%}
+          {%- assign badge3s = "Ships Worldwide|Ships Worldwide||||| " | split: "|" -%}
+          {%- assign descs   = "Experience next generation portable power with Solly, your all in one solution for work, travel, and everyday life.|The complete power setup for those who expect more from every device.|The ultimate version of Solly, crafted with a real carbon fiber body for a lighter, stronger, and more premium feel.|A complete power ecosystem built for those who rely on energy every day.|More power. More flexibility. Get 2x Solly and always have energy where you need it.|Triple Solly. Power for every moment. Keep one at home, one at work, and one on the move.|The ultimate version of Solly, now in a 2x Carbon Edition bundle." | split: "|" -%}
+
+          {%- for handle in handles -%}
+            {%- assign idx     = forloop.index0 -%}
+            {%- assign sp      = all_products[handle] -%}
+            {%- assign c_tag   = tags[idx] -%}
+            {%- assign c_price   = prices[idx] -%}
+            {%- assign c_compare = compares[idx] -%}
+            {%- assign c_b1    = badge1s[idx] -%}
+            {%- assign c_b2    = badge2s[idx] -%}
+            {%- assign c_b3    = badge3s[idx] -%}
+            {%- assign c_desc  = descs[idx] -%}
+            {%- assign c_name  = sp.title | default: handle -%}
+
+            <div class="perk-card">
+              <a href="/products/{{ handle }}" class="perk-card-img-area" style="text-decoration:none;">
+                <span class="perk-card-tag">{{ c_tag }}</span>
+                {%- if sp.featured_image -%}
+                  <img class="perk-card-img"
+                       src="{{ sp.featured_image | image_url: width: 800 }}"
+                       alt="{{ sp.featured_image.alt | default: c_name | escape }}"
+                       loading="lazy">
+                {%- endif -%}
+                <div class="perk-card-price-wrap">
+                  <span class="perk-card-price">{{ c_price }}</span>
+                  {%- if c_compare != blank -%}
+                    <span class="perk-card-compare">{{ c_compare }}</span>
+                  {%- endif -%}
+                </div>
+              </a>
+              <div class="perk-card-body">
+                <h3 class="perk-card-name">{{ c_name }}</h3>
+                <div class="perk-card-desc perk-card-desc--clamp"><p>{{ c_desc }}</p></div>
+                <div class="perk-card-footer">
+                  <div class="perk-card-meta">
+                    {%- if c_b1 != blank -%}
+                      <span class="perk-meta-badge{% if c_b1 contains 'left' %} urgent{% endif %}">{{ c_b1 }}</span>
+                    {%- endif -%}
+                    {%- if c_b2 != blank -%}
+                      <span class="perk-meta-badge">{{ c_b2 }}</span>
+                    {%- endif -%}
+                    {%- if c_b3 != blank and c_b3 != ' ' -%}
+                      <span class="perk-meta-badge">{{ c_b3 }}</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="perk-card-buttons">
+                    <button class="perk-card-atc perk-atc-btn" data-handle="{{ handle }}">
+                      <span class="perk-card-atc-icon">+</span>
+                      <span class="perk-card-atc-label">Add to Cart</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Perks Grid",
+  "settings": []
+}
+{% endschema %}

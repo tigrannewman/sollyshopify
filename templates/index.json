@@ -9,18 +9,12 @@
       "settings": {}
     },
     "perks-grid": {
-      "type": "products-grid",
-      "settings": {
-        "section_title": "Choose the Product",
-        "collection_handle": "perks"
-      }
+      "type": "perks-grid",
+      "settings": {}
     },
-    "addons-grid-v2": {
-      "type": "products-grid",
-      "settings": {
-        "section_title": "Power Up Your Setup",
-        "collection_handle": "addons"
-      }
+    "addons-grid": {
+      "type": "addons-grid",
+      "settings": {}
     },
     "feature": {
       "type": "feature",
@@ -99,7 +93,7 @@
     "header",
     "hero",
     "perks-grid",
-    "addons-grid-v2",
+    "addons-grid",
     "feature",
     "charge",
     "fingertips",
