@@ -15,7 +15,13 @@
         {% if perks.size > 0 %}
 
           {% for product in perks %}
-            {% assign tag_label = product.tags | first %}
+            {%- assign tag_label = '' -%}
+            {%- assign skip_tags = 'perks,limited,Ships Aug 2026,Ships Worldwide,Ships Worldwide' | split: ',' -%}
+            {%- for t in product.tags -%}
+              {%- unless skip_tags contains t or t contains 'Ships' -%}
+                {%- if tag_label == '' -%}{%- assign tag_label = t -%}{%- endif -%}
+              {%- endunless -%}
+            {%- endfor -%}
             {% assign price = product.variants.first.price %}
             {% assign compare = product.variants.first.compare_at_price %}
             <div class="perk-card">
@@ -75,6 +81,7 @@
           {%- assign tags    = "1x|Basic Bundle|Carbon Edition|Pro Bundle|2x|3x|2x Carbon" | split: "|" -%}
           {%- assign prices   = "$79|$89|$109|$119|$139|$189|$209" | split: "|" -%}
           {%- assign compares = "$115|$165|$209||$259|$345|" | split: "|" -%}
+          {%- comment -%} Handles, prices and compares confirmed from Shopify product export {%- endcomment -%}
           {%- assign badge1s = "6 left of 865|4 left of 1068|3 left of 742|13 left of 100|3 left of 410|22 left of 275|3 left of 188" | split: "|" -%}
           {%- assign badge2s = "Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026|Ships Aug 2026" | split: "|" -%}
           {%- assign badge3s = "Ships Worldwide|Ships Worldwide||||| " | split: "|" -%}
