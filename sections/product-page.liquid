@@ -145,11 +145,11 @@
 
 {%- assign in_perks = false -%}
 {%- for col in product.collections -%}
-  {%- if col.handle == 'perks' -%}{%- assign in_perks = true -%}{%- endif -%}
+  {%- if col.handle == 'frontpage' -%}{%- assign in_perks = true -%}{%- endif -%}
 {%- endfor -%}
 
 {%- if in_perks -%}
-  {%- assign addon_products = collections['add-on'].products -%}
+  {%- assign addon_products = collections['perks'].products -%}
   {%- if addon_products.size > 0 -%}
 <section class="section-products" style="padding-top:0;">
   <div class="padding-global">
