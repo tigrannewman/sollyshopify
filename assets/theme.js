@@ -136,6 +136,42 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // ── Homepage grid: Add to Cart (static fallback cards) ──────────
+  document.querySelectorAll('.perk-atc-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var handle = btn.getAttribute('data-handle');
+      if (!handle) return;
+      var originalText = btn.textContent;
+      btn.textContent = 'Adding…';
+      btn.disabled = true;
+
+      fetch('/products/' + handle + '.js')
+        .then(function (r) { return r.json(); })
+        .then(function (product) {
+          var variantId = product.variants[0].id;
+          var body = new FormData();
+          body.append('id', variantId);
+          body.append('quantity', 1);
+          return fetch('/cart/add.js', { method: 'POST', body: body });
+        })
+        .then(function (r) {
+          if (!r.ok) throw new Error('Failed');
+          return fetch('/cart.js').then(function (r) { return r.json(); });
+        })
+        .then(function (cart) {
+          updateCartCount(cart.item_count);
+          showToast('Added to cart!', false);
+          btn.textContent = originalText;
+          btn.disabled = false;
+        })
+        .catch(function () {
+          showToast('Something went wrong. Please try again.', true);
+          btn.textContent = originalText;
+          btn.disabled = false;
+        });
+    });
+  });
+
   // ── Product page: Buy Now ────────────────────────────────────────
   const buyNowBtn = document.querySelector('.btn-buy-now');
   if (buyNowBtn) {
