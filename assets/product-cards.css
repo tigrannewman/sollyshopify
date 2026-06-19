@@ -153,6 +153,9 @@
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
+.perk-card-buttons form {
+  display: contents;
+}
 
 .perk-card-btn {
   padding: 12px 10px;
