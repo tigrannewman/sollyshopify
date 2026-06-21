@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
           updateCartCount(cart.item_count);
           showToast('Added to cart!', false);
           if (btn) { btn.textContent = originalText; btn.disabled = false; }
+          if (window.refreshCheckoutBar) window.refreshCheckoutBar();
         })
         .catch(function () {
           showToast('Something went wrong. Please try again.', true);
